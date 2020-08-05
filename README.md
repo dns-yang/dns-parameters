@@ -6,4 +6,5 @@ Modules that mirror IANA registries should be generated from the current content
 
 After running `make`, the following YANG modules will be present:
 
-* _iana-dns-class-rr-type_: [DNS CLASSes and RR TYPEs](https://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml)
+* _iana-dns-class-rr-type_: [DNS CLASSes and RR TYPEs](https://www.iana.org/assignments/dns-parameters)
+* _dns-yang-tsig-algorithms_: [TSIG Algorithm Names](https://www.iana.org/assignments/tsig-algorithm-names)
