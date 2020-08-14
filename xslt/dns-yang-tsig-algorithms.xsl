@@ -1,116 +1,63 @@
 <?xml version="1.0" standalone="yes"?>
 <stylesheet xmlns="http://www.w3.org/1999/XSL/Transform"
             xmlns:iana="http://www.iana.org/assignments"
+	    xmlns:yin="urn:ietf:params:xml:ns:yang:yin:1"
+	    xmlns:html="http://www.w3.org/1999/xhtml"
             version="1.0">
-  <output method="text"/>
+  <output method="xml"/>
   <strip-space elements="*"/>
-
-  <variable name="dq">"</variable>
-  <variable name="sq">'</variable>
-  <variable name="lf">&#xA;</variable>
-
-  <variable name="module-intro">
-    <text>module dns-yang-tsig-algorithms {
-  yang-version 1.1;
-  namespace "urn:dns-yang:params:xml:ns:yang:dns-yang-tsig-algorithms";
-  prefix tsig;
-
-  organization
-    "DNS-YANG project";
-
-  contact
-    "https://github.com/dns-yang/dns-parameters";
-
-  description
-    "This YANG module translates IANA registry 'Secret Key Transaction
-     Authentication for DNS (TSIG) Algorithm Names' to a set of YANG
-     identities.";
-
-  reference
-    "IANA: Secret Key Transaction Authentication for DNS (TSIG)
-     Algorithm Names.
-     http://www.iana.org/assignments/tsig-algorithm-names";</text>
-     <text>&#xA;&#xA;</text>
-  </variable>
-
-  <template name="identity">
-    <param name="id"/>
-    <param name="base" select="'tsig-algorithm'"/>
-    <value-of select="concat('  identity ', $id, ' {&#xA;')"/>
-    <value-of select="concat('    base ', $base, ';&#xA;')"/>
-    <variable name="xrefs" select="iana:xref[@type!='note']"/>
-    <if test="$xrefs">
-      <text>    reference&#xA;      "</text>
-      <if test="count($xrefs)&gt;1">- </if>
-      <apply-templates select="iana:xref[@type!='note']"/>
-    </if>
-    <text>  }&#xA;&#xA;</text>
-  </template>
-
+  <include href="iana-common.xsl"/>
+  
   <template match="/">
-    <value-of select="$module-intro"/>
-    <apply-templates select="iana:registry[@id='tsig-algorithm-names']"/>
-    <text>}&#xA;</text>
+    <element name="yin:module">
+      <attribute name="name">dns-yang-tsig-algorithms</attribute>
+      <call-template name="yang-version"/>
+      <element name="yin:namespace">
+	<attribute name="uri">
+	  <value-of
+	      select="concat($dns-yang-uri, 'dns-yang-tsig-algorithms')"/>
+	</attribute>
+      </element>
+      <element name="yin:prefix">
+	<attribute name="value">tsig</attribute>
+      </element>
+      <call-template name="dns-yang-org-con"/>
+      <element name="yin:description">
+	<element name="yin:text">This YANG module translates IANA
+	registry 'Secret Key Transaction Authentication for DNS (TSIG)
+	Algorithm Names' to a set of YANG identities.</element>
+      </element>
+      <element name="yin:reference">
+	<element name="yin:text">
+	  <element name="html:p">IANA: Secret Key Transaction
+	  Authentication for DNS (TSIG) Algorithm Names.<element
+	  name="html:br"/>http://www.iana.org/assignments/tsig-algorithm-names</element>
+	</element>
+      </element>
+      <apply-templates select="iana:registry[@id='tsig-algorithm-names']"/>
+    </element>
   </template>
 
   <template match="iana:registry[@id='tsig-algorithm-names']">
     <apply-templates select="iana:updated"/>
+    <comment>Identities</comment>
+    <element name="yin:identity">
+      <attribute name="name">tsig-algorithm</attribute>
+      <element name="yin:description">
+	<element name="yin:text">Base identity from which specific
+	TSIG Algorithms are derived.</element>
+      </element>
+    </element>
     <apply-templates
-        select="iana:registry[@id='tsig-algorithm-names-1']"/>
-  </template>
-
-  <template match="iana:updated">
-    <value-of select="concat('  revision ', ., ';&#xA;')"/>
-  </template>
-
-  <template match="iana:registry[@id='tsig-algorithm-names-1']">
-    <text>
-  /* Identities */
-
-  identity tsig-algorithm {
-    description
-      "Base identity from which specific TSIG Algorithms are
-       derived.";
-    }&#xA;&#xA;</text>
-    <apply-templates select="iana:record"/>
+        select="iana:registry[@id='tsig-algorithm-names-1']/
+		iana:record"/>
   </template>
 
   <template match="iana:record">
     <call-template name="identity">
       <with-param name="id" select="iana:name"/>
+      <with-param name="base">tsig-algorithm</with-param>
     </call-template>
-  </template>
-
-  <template match="iana:xref">
-    <choose>
-      <when test="@type='rfc'">
-        <value-of
-            select="concat('RFC ', substring-after(@data, 'rfc'))"/>
-      </when>
-      <when test="@type='person'">
-        <apply-templates
-            select="/iana:registry/iana:people/iana:person[
-                    @id=current()/@data]"/>
-      </when>
-      <when test="@type='text'">
-        <value-of select="translate(., $dq, $sq)"/>
-      </when>
-      <otherwise>
-        <value-of select="@data"/>
-      </otherwise>
-    </choose>
-    <choose>
-      <when test="position()=last()">
-        <text>";&#xA;</text>
-      </when>
-      <otherwise>
-        <text>&#xA;       - </text>
-      </otherwise>
-    </choose>
-  </template>
-
-  <template match="iana:person">
-    <value-of select="concat(iana:name, ' &lt;', iana:uri, '&gt;')"/>
   </template>
 
 </stylesheet>

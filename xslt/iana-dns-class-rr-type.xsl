@@ -1,172 +1,179 @@
 <?xml version="1.0" standalone="yes"?>
 <stylesheet xmlns="http://www.w3.org/1999/XSL/Transform"
             xmlns:iana="http://www.iana.org/assignments"
+	    xmlns:yin="urn:ietf:params:xml:ns:yang:yin:1"
+	    xmlns:html="http://www.w3.org/1999/xhtml"
             version="1.0">
-  <output method="text"/>
+  <output method="xml"/>
   <strip-space elements="*"/>
-
-  <variable name="dq">"</variable>
-  <variable name="sq">'</variable>
-  <variable name="lf">&#xA;</variable>
-
-  <variable name="module-intro">
-    <text>module iana-dns-class-rr-type {
-  yang-version 1.1;
-  namespace "urn:ietf:params:xml:ns:yang:iana-dns-class-rr-type";
-  prefix dnsct;
-
-  organization
-    "Internet Assigned Numbers Authority (IANA)";
-
-  contact
-    "        Internet Assigned Numbers Authority
-
-     Postal: ICANN
-             4676 Admiralty Way, Suite 330
-             Marina del Rey, CA 90292
-
-     Tel:    +1 310 823 9358
-
-     &lt;mailto:iana@iana.org&gt;";
-
-  description
-    "This YANG module translates IANA registries 'DNS CLASSes' and
-     'Resource Record (RR) TYPEs' to YANG derived types.
-
-     Copyright (c) 2020 IETF Trust and the persons identified as
-     authors of the code. All rights reserved.
-
-     Redistribution and use in source and binary forms, with or
-     without modification, is permitted pursuant to, and subject to
-     the license terms contained in, the Simplified BSD License set
-     forth in Section 4.c of the IETF Trust's Legal Provisions
-     Relating to IETF Documents
-     (https://trustee.ietf.org/license-info).
-
-     This initial version of this YANG module was generated from
-     the corresponding IANA registries using a XSLT stylesheet
-     from Appendix A of RFC XXXX
-     (https://tools.ietf.org/html/rfcXXXX); see the RFC itself for
-     full legal notices.";
-
-  reference
-    "IANA 'Domain Name System (DNS) Parameters' registry
-     https://www.iana.org/assignments/dns-parameters";</text>
-     <text>&#xA;&#xA;</text>
-  </variable>
-
-  <template name="enum">
-    <param name="id"/>
-    <value-of select="concat('      enum ', $id)"/>
-    <text> {&#xA;        value </text>
-    <value-of select="concat(iana:value, ';&#xA;')"/>
-    <if test="contains(iana:description, 'OBSOLETE')">
-      <text>        status obsolete;&#xA;</text>
-    </if>
-    <apply-templates select="iana:description"/>
-    <variable name="xrefs" select="iana:xref[@type!='note']"/>
-    <if test="$xrefs">
-      <text>        reference&#xA;          "</text>
-      <if test="count($xrefs)&gt;1">- </if>
-      <apply-templates select="iana:xref[@type!='note']"/>
-    </if>
-    <text>      }&#xA;</text>
-  </template>
-
+  <include href="iana-common.xsl"/>
+  
   <template match="/">
-    <value-of select="$module-intro"/>
-    <apply-templates select="iana:registry[@id='dns-parameters']"/>
-    <text>}&#xA;</text>
+    <element name="yin:module">
+      <attribute name="name">iana-dns-class-rr-type</attribute>
+      <call-template name="yang-version"/>
+      <element name="yin:namespace">
+	<attribute name="uri">
+	  <text>urn:ietf:params:xml:ns:yang:iana-dns-class-rr-type</text>
+	</attribute>
+      </element>
+      <element name="yin:prefix">
+	<attribute name="value">dnsct</attribute>
+      </element>
+      <element name="yin:organization">
+	<element name="yin:text">Internet Assigned Numbers Authority
+	(IANA)</element>
+      </element>
+      <element name="yin:contact">
+	<element name="yin:text">
+	  <element name="html:p">Internet Assigned Numbers
+	  Authority</element>
+	  <element name="html:p">4676 Admiralty Way, Suite
+	  330<element name="html:br"/>
+	  Marina del Rey, CA 90292</element>
+	  <element name="html:p">Tel: +1 310 823 9358</element>
+	  <element
+	      name="html:p">&lt;mailto:iana@iana.org&gt;</element>
+	</element>
+      </element>
+      <element name="yin:description">
+	<element name="yin:text">
+	  <element name="html:p">This YANG module translates IANA
+	  registries 'DNS CLASSes' and 'Resource Record (RR) TYPEs' to
+	  YANG derived types.</element>
+	  <element name="html:p">Copyright © 2020 IETF Trust and the
+	  persons identified as authors of the code. All rights
+	  reserved.</element>
+	  <element name="html:p">Redistribution and use in source and
+	  binary forms, with or without modification, is permitted
+	  pursuant to, and subject to the license terms contained in,
+	  the Simplified BSD License set forth in Section 4.c of the
+	  IETF Trust's Legal Provisions Relating to IETF Documents
+	  (https://trustee.ietf.org/license-info).</element>
+	  <element name="html:p"> This initial version of this YANG
+	  module was generated from the corresponding IANA registries
+	  using a XSLT stylesheet from Appendix A of RFC XXXX
+	  (https://tools.ietf.org/html/rfcXXXX); see the RFC itself
+	  for full legal notices.</element>
+	</element>
+      </element>
+      <element name="yin:reference">
+	<element name="yin:text">
+	  <element name="html:p">IANA 'Domain Name System (DNS)
+	  Parameters' registry<element
+	  name="html:br"/>https://www.iana.org/assignments/dns-parameters</element>
+	</element>
+      </element>
+      <apply-templates select="iana:registry[@id='dns-parameters']"/>
+    </element>
   </template>
 
   <template match="iana:registry[@id='dns-parameters']">
     <apply-templates select="iana:updated"/>
+    <comment>Typedefs</comment>
     <apply-templates
         select="iana:registry[@id='dns-parameters-2']"/>
     <apply-templates
         select="iana:registry[@id='dns-parameters-4']"/>
   </template>
 
-  <template match="iana:updated">
-    <value-of select="concat('  revision ', ., ' {')"/>
-    <text>
-    description
-      "Initial revision.";
-    reference
-      "RFC XXXX: YANG Types for DNS Classes and Resource Record
-       Types";
-  }
-
-  /* Typedefs */&#xA;&#xA;</text>
-  </template>
-
   <template match="iana:registry[@id='dns-parameters-2']">
-    <text>  typedef dns-class-name {&#xA;</text>
-    <text>    type enumeration {&#xA;</text>
-    <apply-templates
-        select="iana:record[not(iana:description='Unassigned' or
-                starts-with(iana:description,'Reserved'))]"
-        mode="class"/>
-    <text>    }
-    description
-      "This enumeration type defines mnemonic names and corresponding
-       numeric values of DNS classes.";
-    reference
-      "RFC 6895: Domain Name System (DNS) IANA Considerations";
-  }
-    
-  typedef dns-class {
-    type union {
-      type uint16;
-      type dns-class-name;
-    }
-    description
-      "This type allows for referring to a DNS class using either the
-       assigned mnemonic name or numeric value.";
-  }&#xA;&#xA;</text>
+    <element name="yin:typedef">
+      <attribute name="name">dns-class-name</attribute>
+      <element name="yin:type">
+	<attribute name="name">enumeration</attribute>
+	<apply-templates
+            select="iana:record[not(iana:description='Unassigned' or
+                    starts-with(iana:description,'Reserved'))]"
+            mode="class"/>
+      </element>
+      <element name="yin:description">
+	<element name="yin:text">This enumeration type defines
+	mnemonic names and corresponding numeric values of DNS
+	classes.</element>
+      </element>
+      <element name="yin:reference">
+	<element name="yin:text">RFC 6895: Domain Name System (DNS)
+	IANA Considerations</element>
+      </element>
+    </element>
+    <element name="yin:typedef">
+      <attribute name="name">dns-class</attribute>
+      <element name="yin:type">
+	<attribute name="name">union</attribute>
+	<element name="yin:type">
+	  <attribute name="name">uint16</attribute>
+	</element>
+	<element name="yin:type">
+	  <attribute name="name">dns-class-name</attribute>
+	</element>
+      </element>
+      <element name="yin:description">
+	<element name="yin:text">This type allows for referring to a
+	DNS class using either the assigned mnemonic name or numeric
+	value.</element>
+      </element>
+    </element>
   </template>
 
   <template match="iana:registry[@id='dns-parameters-4']">
-    <text>  typedef rr-type-name {&#xA;</text>
-    <text>    type enumeration {&#xA;</text>
-    <apply-templates
-        select="iana:record[iana:type!='Unassigned' and
-                iana:type!='Private use' and iana:type!='Reserved']"
-        mode="rr-type"/>
-    <text>    }
-    description
-      "This enumeration type defines mnemonic names and corresponding
-       numeric values of DNS resource record types.";
-    reference
-      "- RFC 6895: Domain Name System (DNS) IANA Considerations
-
-       - RFC 1035: Domain Names - Implementation and Specification";
-  }
-
-  typedef rr-type {
-    type union {
-      type uint16;
-      type rr-type-name;
-    }
-    description
-      "This type allows for referring to a DNS resource record type
-       using either the assigned mnemonic name or numeric value.";
-  }&#xA;</text>
+    <element name="yin:typedef">
+      <attribute name="name">rr-type-name</attribute>
+      <element name="yin:type">
+	<attribute name="name">enumeration</attribute>
+	<apply-templates
+	    select="iana:record[iana:type!='Unassigned' and
+		    iana:type!='Private use' and iana:type!='Reserved']"
+	    mode="rr-type"/>
+      </element>
+      <element name="yin:description">
+	<element name="yin:text">This enumeration type defines
+	mnemonic names and corresponding numeric values of DNS
+	resource record types.</element>
+      </element>
+      <element name="yin:reference">
+	<element name="yin:text">
+	  <element name="html:ul">
+	    <element name="html:li">RFC 6895: Domain Name System (DNS)
+	    IANA Considerations</element>
+	    <element name="html:li">RFC 1035: Domain Names -
+	    Implementation and Specification</element>
+	  </element>
+	</element>
+      </element>
+    </element>
+    <element name="yin:typedef">
+      <attribute name="name">rr-type</attribute>
+      <element name="yin:type">
+	<attribute name="name">union</attribute>
+	<element name="yin:type">
+	  <attribute name="name">uint16</attribute>
+	</element>
+	<element name="yin:type">
+	  <attribute name="name">rr-type-name</attribute>
+	</element>
+      </element>
+      <element name="yin:description">
+	<element name="yin:text">This type allows for referring to a
+	DNS resource record type using either the assigned mnemonic
+	name or numeric value.</element>
+      </element>
+    </element>
   </template>
 
   <template match="iana:record" mode="class">
     <call-template name="enum">
       <with-param name="id">
-        <choose>
+	<choose>
           <when test="contains(iana:description,'(')">
             <value-of select="substring-before(substring-after(
                               iana:description, '('), ')')"/>
           </when>
           <otherwise>
             <value-of
-                select="substring-after(iana:description, ' ')"/>
+		select="substring-after(iana:description, ' ')"/>
           </otherwise>
-        </choose>
+	</choose>
       </with-param>
     </call-template>
   </template>
@@ -175,43 +182,6 @@
     <call-template name="enum">
       <with-param name="id" select="iana:type"/>
     </call-template>
-  </template>
-
-  <template match="iana:description">
-    <text>        description&#xA;          </text>
-    <value-of select="concat($dq, ., $dq, ';&#xA;')"/>
-  </template>
-
-  <template match="iana:xref">
-    <choose>
-      <when test="@type='rfc'">
-        <value-of
-            select="concat('RFC ', substring-after(@data, 'rfc'))"/>
-      </when>
-      <when test="@type='person'">
-        <apply-templates
-            select="/iana:registry/iana:people/iana:person[
-                    @id=current()/@data]"/>
-      </when>
-      <when test="@type='text'">
-        <value-of select="translate(., $dq, $sq)"/>
-      </when>
-      <otherwise>
-        <value-of select="@data"/>
-      </otherwise>
-    </choose>
-    <choose>
-      <when test="position()=last()">
-        <text>";&#xA;</text>
-      </when>
-      <otherwise>
-        <text>&#xA;           - </text>
-      </otherwise>
-    </choose>
-  </template>
-
-  <template match="iana:person">
-    <value-of select="concat(iana:name, ' &lt;', iana:uri, '&gt;')"/>
   </template>
 
 </stylesheet>
