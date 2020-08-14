@@ -10,7 +10,5 @@ Modules that mirror IANA registries are generated from the current contents of e
 ## Prerequisites
 
 * [curl](https://curl.haxx.se/)
-
 * [xsltproc](http://xmlsoft.org/XSLT/xsltproc2.html)
-
 * GitHub project [yin-tools](https://github.com/llhotka/yin-tools) – the local directory where this project is cloned should be specified in the Makefile (variable `YINTOOLS`).
