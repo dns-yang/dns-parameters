@@ -27,13 +27,7 @@
 	registry 'Secret Key Transaction Authentication for DNS (TSIG)
 	Algorithm Names' to a set of YANG identities.</element>
       </element>
-      <element name="yin:reference">
-	<element name="yin:text">
-	  <element name="html:p">IANA: Secret Key Transaction
-	  Authentication for DNS (TSIG) Algorithm Names.<element
-	  name="html:br"/>http://www.iana.org/assignments/tsig-algorithm-names</element>
-	</element>
-      </element>
+      <apply-templates select="iana:registry" mode="meta"/>
       <apply-templates select="iana:registry[@id='tsig-algorithm-names']"/>
     </element>
   </template>

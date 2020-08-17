@@ -57,13 +57,7 @@
 	  for full legal notices.</element>
 	</element>
       </element>
-      <element name="yin:reference">
-	<element name="yin:text">
-	  <element name="html:p">IANA 'Domain Name System (DNS)
-	  Parameters' registry<element
-	  name="html:br"/>https://www.iana.org/assignments/dns-parameters</element>
-	</element>
-      </element>
+      <apply-templates select="iana:registry" mode="meta"/>
       <apply-templates select="iana:registry[@id='dns-parameters']"/>
     </element>
   </template>

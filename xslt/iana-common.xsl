@@ -13,10 +13,12 @@ into YANG modules (in YIN format).
 	    xmlns:html="http://www.w3.org/1999/xhtml"
 	    version="1.0">
 
+  <param
+      name="dns-yang-uri">urn:dns-yang:params:xml:ns:yang:</param>
+  <param
+      name="iana-base-url">https://www.iana.org/assignments/</param>
   <variable name="dq">"</variable>
   <variable name="sq">'</variable>
-  <variable
-      name="dns-yang-uri">urn:dns-yang:params:xml:ns:yang:</variable>
 
   <template name="yang-version">
     <element name="yin:yang-version">
@@ -31,6 +33,18 @@ into YANG modules (in YIN format).
     <element name="yin:contact">
       <element
 	  name="yin:text">https://github.com/dns-yang/dns-parameters</element>
+    </element>
+  </template>
+
+  <template match="iana:registry" mode="meta">
+    <element name="yin:reference">
+      <element name="yin:text">
+	<element name="html:p">
+	  <value-of select="iana:title"/>
+	  <element name="html:br"/>
+	  <value-of select="concat($iana-base-url, @id)"/>
+	</element>
+      </element>
     </element>
   </template>
 
