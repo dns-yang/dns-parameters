@@ -6,6 +6,7 @@ Modules that mirror IANA registries are generated from the current contents of e
 
 * _iana-dns-class-rr-type_: [DNS CLASSes and RR TYPEs](https://www.iana.org/assignments/dns-parameters)
 * _dns-yang-tsig-algorithms_: [TSIG Algorithm Names](https://www.iana.org/assignments/tsig-algorithm-names)
+* _dns-yang-dnssec-algorithms_: [Domain Name System Security (DNSSEC) Algorithm Numbers](https://www.iana.org/assignments/dns-sec-alg-numbers)
 
 The generated modules can also be syntactically validated using
 
